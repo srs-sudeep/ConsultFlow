@@ -1,39 +1,38 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { logsApi } from '@/lib/api'
+import { FileText, Clock, LayoutDashboard, Plus, CheckCircle, XCircle, Loader2 } from 'lucide-react'
+import Logo, { LoadingLogo, Attribution } from '@/components/Logo'
 
 interface Log {
   _id: string
-  status: 'success' | 'failed' | 'running'
-  actionsExecuted: string[]
-  error?: string
-  executedAt: string
   workflowId: {
     _id: string
     name: string
-    actions: string[]
   }
+  status: 'success' | 'failed' | 'running'
+  actionsExecuted: string[]
+  error?: string
+  createdAt: string
 }
 
 export default function LogsPage() {
   const router = useRouter()
   const [logs, setLogs] = useState<Log[]>([])
   const [loading, setLoading] = useState(true)
-  const [total, setTotal] = useState(0)
-  const [page, setPage] = useState(0)
-  const limit = 20
 
   useEffect(() => {
     loadLogs()
-  }, [page])
+  }, [])
 
   const loadLogs = async () => {
     try {
-      const res = await logsApi.getAll({ limit, skip: page * limit })
-      setLogs(res.data.logs)
-      setTotal(res.data.total)
+      const res = await logsApi.getAll({ limit: 50 })
+      // API returns { logs, total, limit, skip }
+      setLogs(res.data.logs || [])
     } catch (error: any) {
       if (error.response?.status === 401) {
         router.push('/login')
@@ -43,151 +42,167 @@ export default function LogsPage() {
     }
   }
 
-  const getStatusColor = (status: string) => {
+  const getStatusIcon = (status: string) => {
     switch (status) {
       case 'success':
-        return 'bg-green-100 text-green-800'
+        return <CheckCircle className="w-5 h-5 text-green-500" />
       case 'failed':
-        return 'bg-red-100 text-red-800'
+        return <XCircle className="w-5 h-5 text-red-500" />
       case 'running':
-        return 'bg-yellow-100 text-yellow-800'
+        return <Loader2 className="w-5 h-5 text-yellow-500 animate-spin" />
       default:
-        return 'bg-gray-100 text-gray-800'
+        return null
+    }
+  }
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'success':
+        return 'bg-green-500/10 text-green-400 border-green-500/20'
+      case 'failed':
+        return 'bg-red-500/10 text-red-400 border-red-500/20'
+      case 'running':
+        return 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20'
+      default:
+        return 'bg-gray-500/10 text-gray-400 border-gray-500/20'
     }
   }
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-center">
-          <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary-500 border-t-transparent"></div>
-          <p className="text-gray-600">Loading...</p>
-        </div>
+      <div className="flex min-h-screen items-center justify-center bg-[#0a0a1a]">
+        <LoadingLogo message="Loading logs..." />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm">
-        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-900">Execution Logs</h1>
-            <button
-              onClick={() => router.push('/dashboard')}
-              className="rounded-lg bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-300"
-            >
-              Back to Dashboard
-            </button>
-          </div>
+    <div className="min-h-screen bg-[#0a0a1a] text-white flex">
+      {/* Sidebar */}
+      <aside className="w-64 bg-[#16162a] border-r border-gray-800 flex flex-col animate-[slideIn_0.5s_ease-out]">
+        <div className="p-5 border-b border-gray-800">
+          <Link href="/">
+            <Logo size="md" />
+          </Link>
         </div>
-      </header>
 
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <div className="rounded-lg bg-white shadow-md">
+        <nav className="flex-1 p-4 space-y-2">
+          <Link
+            href="/dashboard"
+            className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800/50 hover:text-white transition-colors"
+          >
+            <LayoutDashboard className="w-5 h-5" />
+            Dashboard
+          </Link>
+          <Link
+            href="/workflow/create"
+            className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800/50 hover:text-white transition-colors"
+          >
+            <Plus className="w-5 h-5" />
+            New Workflow
+          </Link>
+          <Link
+            href="/mom"
+            className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800/50 hover:text-white transition-colors"
+          >
+            <FileText className="w-5 h-5" />
+            MOM Generator
+          </Link>
+          <Link
+            href="/logs"
+            className="flex items-center gap-3 px-4 py-3 rounded-lg bg-gray-800/50 text-white"
+          >
+            <Clock className="w-5 h-5" />
+            Execution Logs
+          </Link>
+        </nav>
+      </aside>
+
+      {/* Main Content */}
+      <main className="flex-1 overflow-y-auto">
+        <div className="p-8">
+          {/* Header */}
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold mb-2">Execution Logs</h1>
+            <p className="text-gray-400">View your workflow execution history</p>
+          </div>
+
           {logs.length === 0 ? (
-            <div className="p-12 text-center">
-              <p className="text-gray-500">No execution logs yet.</p>
-              <button
-                onClick={() => router.push('/dashboard')}
-                className="mt-4 rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-700"
+            <div className="bg-[#16162a] rounded-xl border border-gray-800 p-12 text-center">
+              <div className="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center mx-auto mb-4">
+                <Clock className="w-8 h-8 text-gray-600" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2">No execution logs yet</h3>
+              <p className="text-gray-400 mb-4">Run a workflow to see execution logs here</p>
+              <Link
+                href="/workflow/create"
+                className="inline-flex items-center gap-2 px-6 py-2 rounded-lg bg-gradient-to-r from-orange-500 to-pink-500 text-white font-medium hover:from-orange-600 hover:to-pink-600 transition-all"
               >
-                Create a Workflow
-              </button>
+                <Plus className="w-4 h-4" />
+                Create Workflow
+              </Link>
             </div>
           ) : (
-            <>
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                        Workflow
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                        Status
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                        Actions Executed
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                        Executed At
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                        Error
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200 bg-white">
-                    {logs.map((log) => (
-                      <tr key={log._id} className="hover:bg-gray-50">
-                        <td className="whitespace-nowrap px-6 py-4">
-                          <div className="text-sm font-medium text-gray-900">
-                            {log.workflowId?.name || 'Unknown'}
-                          </div>
-                        </td>
-                        <td className="whitespace-nowrap px-6 py-4">
-                          <span
-                            className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${getStatusColor(
-                              log.status
-                            )}`}
-                          >
+            <div className="space-y-4">
+              {logs.map((log) => (
+                <div
+                  key={log._id}
+                  className="bg-[#16162a] rounded-xl border border-gray-800 p-6 hover:border-gray-700 transition-colors"
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-start gap-4">
+                      {getStatusIcon(log.status)}
+                      <div>
+                        <div className="flex items-center gap-3 mb-2">
+                          <h3 className="font-semibold">
+                            {typeof log.workflowId === 'object' ? log.workflowId.name : 'Unknown Workflow'}
+                          </h3>
+                          <span className={`px-2 py-0.5 rounded-full text-xs font-medium border ${getStatusBadge(log.status)}`}>
                             {log.status}
                           </span>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="text-sm text-gray-900">
-                            {log.actionsExecuted.length > 0
-                              ? log.actionsExecuted.join(', ')
-                              : 'None'}
+                        </div>
+                        <p className="text-sm text-gray-400 mb-2">
+                          {log.actionsExecuted.length} action(s) executed
+                        </p>
+                        {log.error && (
+                          <p className="text-sm text-red-400 bg-red-500/10 px-3 py-2 rounded-lg">
+                            {log.error}
+                          </p>
+                        )}
+                        {log.actionsExecuted.length > 0 && (
+                          <div className="flex flex-wrap gap-2 mt-3">
+                            {log.actionsExecuted.map((action, idx) => (
+                              <span
+                                key={idx}
+                                className="px-2 py-1 bg-gray-800 rounded text-xs text-gray-300"
+                              >
+                                {action.replace(/_/g, ' ')}
+                              </span>
+                            ))}
                           </div>
-                        </td>
-                        <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                          {new Date(log.executedAt).toLocaleString()}
-                        </td>
-                        <td className="px-6 py-4">
-                          {log.error ? (
-                            <div className="max-w-xs truncate text-sm text-red-600">
-                              {log.error}
-                            </div>
-                          ) : (
-                            <span className="text-sm text-gray-400">-</span>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* Pagination */}
-              <div className="flex items-center justify-between border-t border-gray-200 bg-white px-6 py-4">
-                <div className="text-sm text-gray-700">
-                  Showing {page * limit + 1} to {Math.min((page + 1) * limit, total)} of {total}{' '}
-                  results
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm text-gray-400">
+                        {new Date(log.createdAt).toLocaleDateString()}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {new Date(log.createdAt).toLocaleTimeString()}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setPage((p) => Math.max(0, p - 1))}
-                    disabled={page === 0}
-                    className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50"
-                  >
-                    Previous
-                  </button>
-                  <button
-                    onClick={() => setPage((p) => p + 1)}
-                    disabled={(page + 1) * limit >= total}
-                    className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50"
-                  >
-                    Next
-                  </button>
-                </div>
-              </div>
-            </>
+              ))}
+            </div>
           )}
         </div>
       </main>
+
+      {/* Footer Attribution */}
+      <footer className="fixed bottom-4 left-1/2 -translate-x-1/2 z-10">
+        <Attribution />
+      </footer>
     </div>
   )
 }
-

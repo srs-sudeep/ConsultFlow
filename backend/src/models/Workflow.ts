@@ -4,14 +4,22 @@ export type WorkflowAction =
   | 'generate_mom'
   | 'send_email'
   | 'create_calendar'
-  | 'teams_post';
+  | 'teams_post'
+  | 'create_ppt'
+  | 'ai_process'
+  | 'save_data'
+  | 'api_call';
 
 export interface IWorkflow extends Document {
   userId: mongoose.Types.ObjectId;
   name: string;
-  trigger: 'manual';
+  trigger: 'manual' | 'schedule' | 'webhook' | 'transcript';
   actions: WorkflowAction[];
   actionConfigs?: Record<string, any>; // Configuration for each action
+  canvasData?: {
+    nodes: any[];
+    edges: any[];
+  };
   createdAt: Date;
   updatedAt: Date;
 }
@@ -30,18 +38,22 @@ const WorkflowSchema = new Schema<IWorkflow>(
     },
     trigger: {
       type: String,
-      enum: ['manual'],
+      enum: ['manual', 'schedule', 'webhook', 'transcript'],
       default: 'manual',
     },
     actions: {
       type: [String],
-      enum: ['generate_mom', 'send_email', 'create_calendar', 'teams_post'],
+      enum: ['generate_mom', 'send_email', 'create_calendar', 'teams_post', 'create_ppt', 'ai_process', 'save_data', 'api_call'],
       required: true,
     },
     actionConfigs: {
       type: Map,
       of: mongoose.Schema.Types.Mixed,
       default: {},
+    },
+    canvasData: {
+      type: mongoose.Schema.Types.Mixed,
+      default: null,
     },
   },
   {

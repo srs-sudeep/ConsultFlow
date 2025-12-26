@@ -25,7 +25,13 @@ export const authApi = {
 
 // Workflow API
 export const workflowApi = {
-  create: (data: { name: string; actions: string[]; actionConfigs?: Record<string, any> }) => api.post('/workflow', data),
+  create: (data: { 
+    name: string
+    actions: string[]
+    actionConfigs?: Record<string, any>
+    canvasData?: { nodes: any[]; edges: any[] }
+    trigger?: string
+  }) => api.post('/workflow', data),
   getAll: () => api.get('/workflow'),
   getOne: (id: string) => api.get(`/workflow/${id}`),
   run: (id: string, data: any) => api.post(`/workflow/run/${id}`, data),

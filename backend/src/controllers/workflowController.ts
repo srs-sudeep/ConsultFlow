@@ -10,7 +10,7 @@ import { AuthService } from '../auth/authService';
  */
 export const createWorkflow = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { name, actions, actionConfigs } = req.body;
+    const { name, actions, actionConfigs, canvasData, trigger } = req.body;
 
     if (!name || !actions || !Array.isArray(actions) || actions.length === 0) {
       res.status(400).json({ error: 'Name and actions are required' });
@@ -20,9 +20,10 @@ export const createWorkflow = async (req: Request, res: Response): Promise<void>
     const workflow = await Workflow.create({
       userId: req.user!._id,
       name,
-      trigger: 'manual',
+      trigger: trigger || 'manual',
       actions,
       actionConfigs: actionConfigs || {},
+      canvasData: canvasData || null,
     });
 
     res.status(201).json(workflow);
