@@ -180,7 +180,7 @@ export default function LandingPage() {
             <div className="flex items-center gap-6 text-sm text-gray-400">
               <a href="#" className="hover:text-white transition-colors">Privacy</a>
               <a href="#" className="hover:text-white transition-colors">Terms</a>
-              <a href="https://github.com/srs-sudeep" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">GitHub</a>
+              <a href="https://github.com/srs-sudeep/ConsultFlow" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">GitHub</a>
             </div>
           </div>
           <div className="flex flex-col items-center gap-2">

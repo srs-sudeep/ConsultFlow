@@ -20,8 +20,8 @@ Before you begin, ensure you have the following installed:
 ## Clone the Repository
 
 ```bash
-git clone https://github.com/srs-sudeep/consultflow.git
-cd consultflow
+git clone https://github.com/srs-sudeep/ConsultFlow.git
+cd ConsultFlow
 ```
 
 ## Project Structure
@@ -203,6 +203,6 @@ npm install
 ---
 
 :::info Need Help?
-If you encounter any issues, check the [GitHub Issues](https://github.com/srs-sudeep) or create a new one.
+If you encounter any issues, check the [GitHub Issues](https://github.com/srs-sudeep/ConsultFlow/issues) or create a new one.
 :::
 

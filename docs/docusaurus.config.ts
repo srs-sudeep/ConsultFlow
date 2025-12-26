@@ -15,7 +15,7 @@ const config: Config = {
   baseUrl: '/',
 
   organizationName: 'srs-sudeep',
-  projectName: 'consultflow',
+  projectName: 'ConsultFlow',
 
   onBrokenLinks: 'warn',
 
@@ -30,7 +30,7 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
-          editUrl: 'https://github.com/srs-sudeep/consultflow/tree/main/docs/',
+          editUrl: 'https://github.com/srs-sudeep/ConsultFlow/tree/main/docs/',
         },
         blog: {
           showReadingTime: true,
@@ -38,7 +38,7 @@ const config: Config = {
             type: ['rss', 'atom'],
             xslt: true,
           },
-          editUrl: 'https://github.com/srs-sudeep/consultflow/tree/main/docs/',
+          editUrl: 'https://github.com/srs-sudeep/ConsultFlow/tree/main/docs/',
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
           onUntruncatedBlogPosts: 'warn',
@@ -77,7 +77,7 @@ const config: Config = {
         },
         {to: '/blog', label: 'Blog', position: 'left'},
         {
-          href: 'https://github.com/srs-sudeep',
+          href: 'https://github.com/srs-sudeep/ConsultFlow',
           label: 'GitHub',
           position: 'right',
         },
@@ -129,7 +129,7 @@ const config: Config = {
             },
             {
               label: 'GitHub',
-              href: 'https://github.com/srs-sudeep',
+              href: 'https://github.com/srs-sudeep/ConsultFlow',
             },
           ],
         },
@@ -144,7 +144,7 @@ const config: Config = {
     announcementBar: {
       id: 'support_us',
       content:
-        '⭐ If you like ConsultFlow, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/srs-sudeep">GitHub</a>!',
+        '⭐ If you like ConsultFlow, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/srs-sudeep/ConsultFlow">GitHub</a>!',
       backgroundColor: '#f97316',
       textColor: '#fff',
       isCloseable: true,

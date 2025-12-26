@@ -246,7 +246,7 @@ export function Attribution() {
       <span className="text-red-500">❤️</span>
       <span>by</span>
       <a 
-        href="https://github.com/srs-sudeep" 
+        href="https://github.com/srs-sudeep/ConsultFlow" 
         target="_blank" 
         rel="noopener noreferrer"
         className="text-orange-500 hover:text-orange-400 transition-colors font-medium"

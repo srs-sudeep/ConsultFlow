@@ -45,8 +45,8 @@ ConsultFlow transforms meeting transcripts into structured minutes, automates em
 
 ```bash
 # Clone the repository
-git clone https://github.com/srs-sudeep/consultflow.git
-cd consultflow
+git clone https://github.com/srs-sudeep/ConsultFlow.git
+cd ConsultFlow
 
 # Backend setup
 cd backend
