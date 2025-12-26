@@ -185,7 +185,7 @@ export default function LandingPage() {
           </div>
           <div className="flex flex-col items-center gap-2">
             <Attribution />
-            <span className="text-xs text-gray-600">© 2024 ConsultFlow. All rights reserved.</span>
+            <span className="text-xs text-gray-600">© 2025 ConsultFlow. All rights reserved.</span>
           </div>
         </div>
       </footer>
