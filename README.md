@@ -1,189 +1,174 @@
-# ConsultFlow - Consulting Automation Copilot
+# ConsultFlow 🚀
 
-A production-quality MVP platform for automating consulting workflows with Microsoft 365 integration and AI-powered meeting minutes generation.
+**AI-Powered Workflow Automation for Consulting Teams**
 
-## 🏗️ Architecture
+[![Built with ❤️](https://img.shields.io/badge/Built%20with-%E2%9D%A4%EF%B8%8F-red)](https://github.com/srs-sudeep)
+[![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
+[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-- **Frontend**: Next.js 14 + Tailwind CSS + TypeScript
-- **Backend**: Node.js + Express + TypeScript
-- **Database**: MongoDB (Mongoose)
-- **Authentication**: Azure AD OAuth2 (Microsoft Identity Platform)
-- **APIs**: Microsoft Graph API
-- **AI**: Azure OpenAI / OpenAI API
+ConsultFlow transforms meeting transcripts into structured minutes, automates email delivery, creates calendar events, and posts to Microsoft Teams - all through an intuitive drag-and-drop workflow builder.
+
+![ConsultFlow Dashboard](docs/static/img/logo.svg)
+
+## ✨ Features
+
+- **🎨 Visual Workflow Builder** - Build automations with drag-and-drop, no coding required
+- **🤖 AI-Powered MOM Generation** - Transform meeting notes into structured minutes using GPT
+- **📧 Outlook Email Integration** - Send emails automatically via Microsoft Graph
+- **📅 Calendar Event Creation** - Schedule follow-up meetings with extracted dates
+- **💬 Teams Channel Posting** - Share updates with your team automatically
+- **📊 Execution Logs** - Track and monitor all workflow runs
+- **🔐 Azure AD Authentication** - Secure single sign-on with Microsoft
+
+## 🛠️ Tech Stack
+
+| Layer | Technologies |
+|-------|-------------|
+| **Frontend** | Next.js 14, React 18, TypeScript, Tailwind CSS, React Flow |
+| **Backend** | Node.js, Express, TypeScript, Mongoose |
+| **Database** | MongoDB |
+| **Auth** | Azure AD OAuth 2.0, MSAL Node |
+| **AI** | OpenAI GPT-3.5/4 |
+| **APIs** | Microsoft Graph API |
 
 ## 🚀 Quick Start
 
-> **New to ConsultFlow?** Start with [QUICKSTART.md](./QUICKSTART.md) for a 5-minute setup guide!
-
 ### Prerequisites
 
-- Node.js 18+ and npm
-- MongoDB (local or cloud instance)
+- Node.js 18+
+- MongoDB 6+
 - Azure AD App Registration
-- OpenAI API key or Azure OpenAI endpoint
+- OpenAI API Key
 
-For detailed setup instructions, see [SETUP.md](./SETUP.md).
-
-### 1. Backend Setup
+### Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/srs-sudeep/consultflow.git
+cd consultflow
+
+# Backend setup
 cd backend
 npm install
-cp .env.example .env
-# Edit .env with your configuration
+cp .env.example .env  # Configure your environment
 npm run dev
-```
 
-Backend runs on `http://localhost:3001`
-
-### 2. Frontend Setup
-
-```bash
+# Frontend setup (new terminal)
 cd frontend
 npm install
-cp .env.example .env.local
-# Edit .env.local with your configuration
 npm run dev
+
+# Documentation (optional)
+cd docs
+npm install
+npm start
 ```
 
-Frontend runs on `http://localhost:3000`
+### Environment Variables
 
-## 🔐 Azure AD Configuration
-
-### Step 1: Register Application in Azure Portal
-
-1. Go to [Azure Portal](https://portal.azure.com)
-2. Navigate to **Azure Active Directory** > **App registrations**
-3. Click **New registration**
-4. Name: `ConsultFlow`
-5. Supported account types: **Accounts in any organizational directory and personal Microsoft accounts**
-6. Redirect URI: `http://localhost:3001/auth/callback` (Web)
-7. Click **Register**
-
-### Step 2: Configure API Permissions
-
-1. Go to **API permissions**
-2. Click **Add a permission** > **Microsoft Graph** > **Delegated permissions**
-3. Add the following permissions:
-   - `User.Read`
-   - `Mail.Send`
-   - `Calendars.ReadWrite`
-   - `ChannelMessage.Send`
-4. Click **Add permissions**
-5. Click **Grant admin consent** (if you have admin rights)
-
-### Step 3: Create Client Secret
-
-1. Go to **Certificates & secrets**
-2. Click **New client secret**
-3. Description: `ConsultFlow Secret`
-4. Expires: Choose appropriate duration
-5. Click **Add**
-6. **Copy the secret value immediately** (you won't see it again)
-
-### Step 4: Update Environment Variables
-
-**Backend `.env`:**
-```
-AZURE_CLIENT_ID=<Application (client) ID>
-AZURE_CLIENT_SECRET=<Client secret value>
-AZURE_TENANT_ID=<Directory (tenant) ID>
-AZURE_REDIRECT_URI=http://localhost:3001/auth/callback
-```
-
-**Frontend `.env.local`:**
-```
-NEXT_PUBLIC_AZURE_CLIENT_ID=<Application (client) ID>
-NEXT_PUBLIC_AZURE_TENANT_ID=<Directory (tenant) ID>
-NEXT_PUBLIC_AZURE_REDIRECT_URI=http://localhost:3000
-```
-
-## 📦 Environment Variables
-
-### Backend (.env)
-
+**Backend (.env):**
 ```env
 PORT=3001
-NODE_ENV=development
-SESSION_SECRET=your-session-secret-change-in-production
 MONGODB_URI=mongodb://localhost:27017/consultflow
-
-AZURE_CLIENT_ID=your-azure-client-id
-AZURE_CLIENT_SECRET=your-azure-client-secret
-AZURE_TENANT_ID=your-azure-tenant-id
-AZURE_REDIRECT_URI=http://localhost:3001/auth/callback
-
-# Use either OpenAI or Azure OpenAI
-OPENAI_API_KEY=your-openai-api-key
-# OR
-AZURE_OPENAI_ENDPOINT=your-azure-openai-endpoint
-AZURE_OPENAI_API_KEY=your-azure-openai-api-key
-AZURE_OPENAI_DEPLOYMENT_NAME=gpt-4
-
+AZURE_AD_CLIENT_ID=your-client-id
+AZURE_AD_CLIENT_SECRET=your-client-secret
+AZURE_AD_TENANT_ID=your-tenant-id
+AZURE_AD_REDIRECT_URI=http://localhost:3001/auth/callback
+SESSION_SECRET=your-session-secret
 FRONTEND_URL=http://localhost:3000
+OPENAI_API_KEY=your-openai-key
 ```
 
-### Frontend (.env.local)
-
+**Frontend (.env.local):**
 ```env
 NEXT_PUBLIC_BACKEND_URL=http://localhost:3001
-NEXT_PUBLIC_AZURE_CLIENT_ID=your-azure-client-id
-NEXT_PUBLIC_AZURE_TENANT_ID=your-azure-tenant-id
-NEXT_PUBLIC_AZURE_REDIRECT_URI=http://localhost:3000
 ```
 
-## 🎯 Features
+## 📖 Documentation
 
-- ✅ Azure AD Authentication
-- ✅ Workflow Creation & Execution
-- ✅ AI-Powered Meeting Minutes Generation
-- ✅ Outlook Email Sending
-- ✅ Calendar Event Creation
-- ✅ Microsoft Teams Channel Messaging
-- ✅ Execution Logs
+Full documentation is available in the `/docs` folder, powered by Docusaurus:
+
+- [Getting Started](docs/docs/getting-started/installation.md)
+- [Architecture](docs/docs/architecture/overview.md)
+- [Features](docs/docs/features/workflow-builder.md)
+- [API Reference](docs/docs/api/authentication.md)
+- [Contributing](docs/docs/development/contributing.md)
+
+### Run Documentation Locally
+
+```bash
+cd docs
+npm install
+npm start
+```
+
+Then open http://localhost:3000/consultflow/
 
 ## 📁 Project Structure
 
 ```
 consultflow/
-├── backend/
+├── backend/              # Express.js API server
 │   ├── src/
-│   │   ├── auth/          # Authentication logic
-│   │   ├── routes/        # API routes
-│   │   ├── controllers/   # Route controllers
-│   │   ├── services/      # Business logic
-│   │   │   ├── graph/     # Microsoft Graph API
-│   │   │   ├── ai/        # OpenAI integration
-│   │   │   └── workflow/  # Workflow engine
-│   │   ├── models/        # MongoDB models
-│   │   └── index.ts       # Entry point
-│   ├── package.json
-│   └── tsconfig.json
-├── frontend/
-│   ├── app/               # Next.js app directory
-│   ├── components/        # React components
-│   ├── lib/               # Utilities
+│   │   ├── auth/        # Azure AD authentication
+│   │   ├── controllers/ # Route handlers
+│   │   ├── models/      # Mongoose schemas
+│   │   ├── routes/      # API routes
+│   │   └── services/    # Business logic
 │   └── package.json
-└── README.md
+├── frontend/             # Next.js application
+│   ├── app/             # App Router pages
+│   ├── components/      # React components
+│   ├── lib/             # Utilities
+│   └── package.json
+└── docs/                 # Docusaurus documentation
 ```
 
-## 🚢 Deployment
+## 🔧 API Endpoints
 
-### Vercel (Frontend)
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/auth/login` | GET | Initiate OAuth login |
+| `/auth/callback` | GET | OAuth callback |
+| `/auth/me` | GET | Get current user |
+| `/workflow` | GET/POST | Workflow CRUD |
+| `/workflow/run/:id` | POST | Execute workflow |
+| `/mom/generate` | POST | Generate meeting minutes |
+| `/logs` | GET | Get execution logs |
 
-1. Push code to GitHub
-2. Import project in Vercel
-3. Add environment variables
-4. Deploy
+## 🎯 Roadmap
 
-### Render / Railway (Backend)
+- [x] Visual workflow builder
+- [x] AI MOM generation
+- [x] Email integration
+- [x] Calendar integration
+- [x] Teams integration
+- [ ] Scheduled triggers
+- [ ] PowerPoint generation
+- [ ] Webhook triggers
+- [ ] Team collaboration
 
-1. Connect GitHub repository
-2. Set environment variables
-3. Build command: `npm install && npm run build`
-4. Start command: `npm start`
+## 🤝 Contributing
 
-## 📝 License
+Contributions are welcome! Please read our [Contributing Guide](docs/docs/development/contributing.md) for details.
 
-MIT
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👨‍💻 Author
+
+**Sudeep SRS** - [@srs-sudeep](https://github.com/srs-sudeep)
+
+---
+
+<p align="center">
+  Built with ❤️ by <a href="https://github.com/srs-sudeep">@srs-sudeep</a>
+</p>

@@ -1,0 +1,24 @@
+consultflow:
+  label: ConsultFlow
+  description: Posts about ConsultFlow features and updates
+
+development:
+  label: Development
+  description: Development process and technical decisions
+
+ai:
+  label: AI
+  description: Artificial intelligence and machine learning
+
+automation:
+  label: Automation
+  description: Workflow automation topics
+
+microsoft:
+  label: Microsoft
+  description: Microsoft 365 integration
+
+tutorial:
+  label: Tutorial
+  description: How-to guides and tutorials
+
