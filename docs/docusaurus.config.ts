@@ -11,8 +11,8 @@ const config: Config = {
     v4: true,
   },
 
-  url: 'https://srs-sudeep.github.io',
-  baseUrl: '/consultflow/',
+  url: 'https://consultflow.vercel.app',
+  baseUrl: '/',
 
   organizationName: 'srs-sudeep',
   projectName: 'consultflow',
