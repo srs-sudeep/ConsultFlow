@@ -53,6 +53,14 @@ const sidebars: SidebarsConfig = {
         'development/contributing',
       ],
     },
+    {
+      type: 'category',
+      label: 'Examples',
+      items: [
+        'examples/meeting-transcripts',
+        'examples/quick-test-transcript',
+      ],
+    },
   ],
 };
 
