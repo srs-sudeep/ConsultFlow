@@ -25,23 +25,35 @@ export default function CreateWorkflowPage() {
     }
 
     try {
-      // Convert nodes to actions format for backend
+      // Find trigger node (should be only one)
+      const triggerNode = nodes.find((node) => node.type === 'trigger')
+      const trigger = triggerNode?.data.actionType || 'manual'
+
+      // Convert action nodes to actions format for backend
       const actions = nodes
         .filter((node) => node.type === 'action')
         .map((node) => node.data.actionType)
 
-      // Extract configs
-      const actionConfigs = nodes.reduce((acc, node) => {
-        if (node.data.config && Object.keys(node.data.config).length > 0) {
-          acc[node.data.actionType] = node.data.config
-        }
-        return acc
-      }, {} as Record<string, any>)
+      if (actions.length === 0) {
+        setError('Please add at least one action node')
+        return
+      }
+
+      // Extract configs (only for action nodes)
+      const actionConfigs = nodes
+        .filter((node) => node.type === 'action')
+        .reduce((acc, node) => {
+          if (node.data.config && Object.keys(node.data.config).length > 0) {
+            acc[node.data.actionType] = node.data.config
+          }
+          return acc
+        }, {} as Record<string, any>)
 
       // Save workflow with full node/edge data for canvas
       await workflowApi.create({
         name: workflowName.trim(),
-        actions: actions.length > 0 ? actions : ['generate_mom'], // Default action
+        trigger,
+        actions,
         actionConfigs,
         // Extended data for canvas
         canvasData: {

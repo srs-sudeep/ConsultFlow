@@ -1,8 +1,8 @@
 'use client'
 
+import { Bot, Calendar, ChevronRight, Clock, Database, FileInput, FileText, Globe, Mail, MessageSquare, Play, Presentation, Search, Trash2, Webhook, X } from 'lucide-react'
 import React, { useState } from 'react'
 import { Node } from 'reactflow'
-import { X, Search, Play, FileText, Mail, Calendar, MessageSquare, Presentation, Clock, Webhook, FileInput, Bot, Database, Globe, ChevronRight, Trash2 } from 'lucide-react'
 
 interface ActionCategory {
   name: string
@@ -130,7 +130,7 @@ const actionCategories: ActionCategory[] = [
 ]
 
 interface ActionSidebarProps {
-  onAddNode: (actionType: string, label: string, icon: string, description: string) => void
+  onAddNode: (actionType: string, label: string, icon: string, description: string, nodeType: 'trigger' | 'action') => void
   selectedNode: Node | null
   isConfigOpen: boolean
   onCloseConfig: () => void
@@ -251,7 +251,7 @@ export function ActionSidebar({
                   {category.actions.map((action) => (
                     <button
                       key={action.type}
-                      onClick={() => onAddNode(action.type, action.label, action.type, action.description)}
+                      onClick={() => onAddNode(action.type, action.label, action.type, action.description, action.nodeType)}
                       className="w-full flex items-center gap-3 p-3 bg-[#2a2a4a] rounded-lg border border-gray-700 hover:border-orange-500/50 hover:bg-[#2a2a5a] transition-all group"
                     >
                       <div className="w-8 h-8 rounded-lg bg-gray-800 flex items-center justify-center text-gray-400 group-hover:text-orange-500 transition-colors">

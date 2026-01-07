@@ -92,10 +92,10 @@ export default function WorkflowCanvas({
   }, [])
 
   const addNode = useCallback(
-    (actionType: string, label: string, icon: string, description: string) => {
+    (actionType: string, label: string, icon: string, description: string, nodeType: 'trigger' | 'action') => {
       const newNode: Node = {
         id: `node-${Date.now()}`,
-        type: actionType === 'trigger' ? 'trigger' : 'action',
+        type: nodeType,
         position: {
           x: Math.random() * 400 + 100,
           y: Math.random() * 300 + 100,
